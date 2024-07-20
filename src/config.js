@@ -1,27 +1,26 @@
 const mongoose = require('mongoose');
-const url = 'mongodb://localhost:27017/Login-tut';
 
-// Connect to MongoDB
-mongoose.connect(url)
+const url = 'mongodb://localhost:27017/CombinedDB';
+
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Database Connected Successfully'))
   .catch(err => console.error('Database connection error:', err.message));
 
-const userSchema = new mongoose.Schema({
+const Loginschema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true }
 });
 
-const productSchema = new mongoose.Schema({
+const User = mongoose.model('User', Loginschema);
+
+const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  description: { type: String, required: true },
-  image: { type: String, required: true }, // Added image field
-  category: { type: String, required: true } // Added category field
+  description: { type: String, required: true }
 });
 
-const User = mongoose.model('User', userSchema);
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', ProductSchema);
 
 module.exports = { User, Product };
